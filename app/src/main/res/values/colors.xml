@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Warna Dasar Bawaan -->
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <!-- Background & Surface Colors (Tema ASPAL) -->
+    <color name="bg_main">#0B101A</color>
+    <color name="bg_card">#161D2B</color>
+    <color name="bg_card_light">#1F2739</color>
+
+    <!-- Accent Colors -->
+    <color name="neon_green">#00FF87</color>
+    <color name="neon_green_dim">#1A4D3B</color>
+
+    <!-- Text Colors -->
+    <color name="text_primary">#FFFFFF</color>
+    <color name="text_secondary">#8A95A5</color>
+
+    <!-- Status Colors -->
+    <color name="status_pending">#4B5563</color>
+    <color name="status_verified">#0EA5E9</color>
+    <color name="status_resolved">#10B981</color>
+</resources>

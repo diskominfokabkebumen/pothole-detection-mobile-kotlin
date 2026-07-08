@@ -27,39 +27,32 @@ class DetectionActivity : AppCompatActivity() {
     private var tvDistanceLabel: TextView? = null
     private var tvPotholeCount: TextView? = null
 
-    // Variabel GPS & Jarak
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var locationCallback: LocationCallback
     private var lastLocation: Location? = null
     private var totalDistanceInMeters = 0.0
 
-    // Variabel Detektor AI YOLO
     private lateinit var potholeDetector: PotholeDetector
     private val cameraExecutor = Executors.newSingleThreadExecutor()
     private var totalPotholesDetected = 0
-    private var isCooldownActive = false // Mencegah dobel hitung pada lubang yang sama
+    private var isCooldownActive = false 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
         setContentView(R.layout.activity_detection)
 
-        // Inisialisasi komponen visual sesuai XML
         viewFinderDetection = findViewById(R.id.viewFinderDetection)
         tvDistanceLabel = findViewById(R.id.tvDistanceLabel)
         tvPotholeCount = findViewById(R.id.tvPotholeCount)
         val btnStopDetection = findViewById<Button>(R.id.btnStopDetection)
 
-        // 1. Inisialisasi Detektor AI TFLite
         potholeDetector = PotholeDetector(this)
 
-        // 2. Inisialisasi Klien GPS Google
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
-        // 3. Hidupkan Kamera Preview & Fungsi Analisis AI YOLO
         startCameraAndAIStream()
 
-        // 4. Hidupkan Pelacakan Jarak GPS
         setupLocationTracking()
 
         btnStopDetection.setOnClickListener {
@@ -74,21 +67,19 @@ class DetectionActivity : AppCompatActivity() {
             try {
                 val cameraProvider: ProcessCameraProvider = cameraProviderFuture.get()
 
-                // Aliran video untuk Preview layar HP
                 val preview = Preview.Builder().build().also {
                     it.setSurfaceProvider(viewFinderDetection?.surfaceProvider)
                 }
 
-                // Aliran bingkai video untuk diumpankan ke Model AI YOLO (Image Analysis)
                 val imageAnalysis = ImageAnalysis.Builder()
-                    .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST) // Mengabaikan frame lama jika CPU sibuk
+                    .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST) 
                     .build()
 
                 imageAnalysis.setAnalyzer(cameraExecutor) { imageProxy ->
-                    // Mengonversi frame kamera KameraX menjadi format Bitmap yang dipahami TFLite
+
                     val bitmap = imageProxy.toBitmap()
                     if (bitmap != null) {
-                        // Jalankan pemindaian model YOLOv8
+        
                         val result = potholeDetector.detectPothole(bitmap)
 
                         // Logika hitung jika AI mendeteksi lubang (Result = 1) dan tidak dalam masa cooldown

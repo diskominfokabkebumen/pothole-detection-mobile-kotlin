@@ -1,4 +1,4 @@
-# 🛣️ ASPAL — Aplikasi Pintar Pendeteksi Jalan Rusak
+#  ASPAL — Aplikasi Sistem Pendeteksi Jalan Berlubang
 
 **Nama:** Rizky Fajar Triwibowo
 **NIM:** L0324032
@@ -7,13 +7,13 @@
 
 ---
 
-## 📖 Tentang Aplikasi
+## Tentang Aplikasi
 
 ASPAL adalah aplikasi Android yang dirancang untuk membantu mendeteksi lubang jalan secara otomatis menggunakan kamera smartphone dan model kecerdasan buatan (AI). Aplikasi ini memanfaatkan **YOLOv8** yang telah dilatih khusus untuk mengenali lubang jalan, dikombinasikan dengan pelacakan lokasi GPS untuk mencatat jarak tempuh selama proses pemantauan berlangsung.
 
 Ide dasarnya sederhana: pengendara cukup menempelkan HP di dashboard motor/mobil, menyalakan mode pemantauan, lalu berkendara seperti biasa. Di latar belakang, aplikasi akan otomatis menganalisis rekaman kamera secara real-time dan menghitung jumlah lubang jalan yang terdeteksi sepanjang perjalanan.
 
-## ✨ Fitur Utama
+##  Fitur Utama
 
 - **Deteksi Lubang Real-Time** — Menggunakan model AI YOLOv8 (TensorFlow Lite) yang berjalan langsung di perangkat (on-device), tanpa perlu koneksi internet.
 - **Pelacakan Jarak Otomatis** — Memanfaatkan GPS (Fused Location Provider) untuk menghitung jarak tempuh selama sesi pemantauan berlangsung.
@@ -21,7 +21,7 @@ Ide dasarnya sederhana: pengendara cukup menempelkan HP di dashboard motor/mobil
 - **Sistem Cooldown Cerdas** — Mencegah satu lubang yang sama terhitung berkali-kali saat kendaraan melintasinya secara perlahan.
 - **Ringkasan Laporan** — Menampilkan total jarak tempuh dan jumlah lubang yang ditemukan setelah sesi pemantauan selesai.
 
-## 🧠 Alur Kerja Sistem
+##  Alur Kerja Sistem
 
 1. Pengguna membuka aplikasi dan menekan tombol **"Laporkan Jalan Rusak"** di halaman Beranda.
 2. Aplikasi meminta izin akses **Kamera** dan **Lokasi (GPS)**.
@@ -31,7 +31,7 @@ Ide dasarnya sederhana: pengendara cukup menempelkan HP di dashboard motor/mobil
 6. Secara paralel, GPS terus melacak pergerakan kendaraan dan mengakumulasikan jarak tempuh.
 7. Saat pengguna menekan tombol **"Berhenti"**, sesi pemantauan berakhir dan ringkasan hasil ditampilkan.
 
-## 🛠️ Teknologi yang Digunakan
+##  Teknologi yang Digunakan
 
 | Komponen | Teknologi |
 |---|---|
@@ -62,28 +62,17 @@ app/src/main/
     └── layout/                    # Berkas desain antarmuka (XML)
 ```
 
-## 🚀 Cara Menjalankan Proyek
-
-1. Clone repository ini.
-2. Buka proyek menggunakan **Android Studio**.
-3. Tunggu proses **Gradle Sync** selesai.
-4. Hubungkan perangkat Android fisik (disarankan, karena membutuhkan akses kamera dan GPS) atau gunakan emulator dengan dukungan kamera.
-5. Jalankan aplikasi melalui tombol **Run**.
-
 ## 🧪 Model AI
 
 Model deteksi lubang jalan dilatih menggunakan arsitektur **YOLOv8** melalui **Google Colab**, kemudian diekspor ke format **TensorFlow Lite (.tflite)** agar dapat berjalan secara efisien langsung di perangkat Android tanpa memerlukan koneksi server.
 
-**Dataset & hasil training:**
-🔗 [Tautan Google Drive — isi link Google Drive kamu di sini]
 
 ## 📸 Dokumentasi & Demo
 
-🔗 [Tautan Google Drive — video demo / dokumentasi aplikasi]
+🔗 Progres Minggu 1
+    https://drive.google.com/file/d/1tNSdu2QZ71B-mpSkL5Moj_5Z4yoIxerU/view?usp=sharing
 
-## 📌 Status Proyek
 
-Proyek ini merupakan bagian dari tugas mata kuliah, dikembangkan sebagai bagian dari pembelajaran mengenai integrasi *Computer Vision*, *Hardware Sensors* (Kamera & GPS), dan *Mobile UI/UX Development* dalam satu sistem Android yang utuh.
 
 ---
 

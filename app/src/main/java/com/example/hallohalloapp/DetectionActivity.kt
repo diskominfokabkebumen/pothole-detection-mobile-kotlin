@@ -137,7 +137,7 @@ class DetectionActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         cameraExecutor.shutdown()
-        potholeDetector.close() // Bebaskan memori RAM dari TFLite Interpreter
+        potholeDetector.close()
         if (::fusedLocationClient.isInitialized && ::locationCallback.isInitialized) {
             fusedLocationClient.removeLocationUpdates(locationCallback)
         }

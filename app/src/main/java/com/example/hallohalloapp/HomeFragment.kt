@@ -25,7 +25,6 @@ class HomeFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_home, container, false)
 
-        // Inisialisasi komponen visual sesuai ID XML
         val ivProfile = view.findViewById<ImageView>(R.id.ivProfile)
         val ivNotification = view.findViewById<ImageView>(R.id.ivNotification)
         val tvLihatSemua = view.findViewById<TextView>(R.id.tvLihatSemua)
@@ -33,7 +32,6 @@ class HomeFragment : Fragment() {
 
         val bottomNav = activity?.findViewById<BottomNavigationView>(R.id.bottom_navigation)
 
-        // 1. Pindah ke Halaman Profil
         ivProfile?.setOnClickListener {
             parentFragmentManager.beginTransaction()
                 .replace(R.id.fragment_container, ProfileFragment())
@@ -41,7 +39,6 @@ class HomeFragment : Fragment() {
             bottomNav?.selectedItemId = R.id.nav_profile
         }
 
-        // 2. Pindah ke Halaman Laporan (Lihat Semua)
         tvLihatSemua?.setOnClickListener {
             parentFragmentManager.beginTransaction()
                 .replace(R.id.fragment_container, ReportFragment())
@@ -49,12 +46,12 @@ class HomeFragment : Fragment() {
             bottomNav?.selectedItemId = R.id.nav_report
         }
 
-        // 3. Tombol Notifikasi Lonceng
+
         ivNotification?.setOnClickListener {
             Toast.makeText(context, "Membuka daftar pemberitahuan masuk...", Toast.LENGTH_SHORT).show()
         }
 
-        // 4. Tombol "Laporkan Jalan Rusak" -> Memicu Pop-up Dialog Konfirmasi
+
         btnLapor?.setOnClickListener {
             showConfirmationDialog()
         }
@@ -62,32 +59,29 @@ class HomeFragment : Fragment() {
         return view
     }
 
-    // Fungsi untuk menampilkan Pop-up Dialog Konfirmasi sebelum masuk ke kamera AI
     private fun showConfirmationDialog() {
         val builder = AlertDialog.Builder(requireContext())
         builder.setTitle("Mulai Pemantauan Otomatis?")
         builder.setMessage("Aplikasi akan membuka kamera penuh dan melacak lubang jalan secara otomatis menggunakan AI selama Anda berkendara.")
 
-        // Jika pengguna setuju dan klik "MULAI"
         builder.setPositiveButton("MULAI") { dialog, _ ->
             dialog.dismiss()
-            // Jalankan pengecekan izin perangkat keras
             if (checkAndRequestPermissions()) {
                 Toast.makeText(context, "Membuka Layar Kamera AI...", Toast.LENGTH_SHORT).show()
                 // TODO: Di sini nanti kita panggil Activity baru yang layarnya landscape!
                 Toast.makeText(context, "Membuka Layar Kamera AI...", Toast.LENGTH_SHORT).show()
-// Perintah peluncuran halaman pemindaian horizontal baru
+
                 val intent = android.content.Intent(activity, DetectionActivity::class.java)
                 startActivity(intent)
             }
         }
 
-        // Jika pengguna membatalkan dan klik "BATAL"
+
         builder.setNegativeButton("BATAL") { dialog, _ ->
             dialog.dismiss()
         }
 
-        // Memunculkan dialog ke layar
+
         val alertDialog = builder.create()
         alertDialog.show()
     }

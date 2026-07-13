@@ -5,14 +5,12 @@
     android:layout_height="match_parent"
     android:background="@color/bg_main">
 
-    <!-- Wadah untuk menaruh Halaman (Beranda, Profil, dll) -->
     <FrameLayout
         android:id="@+id/fragment_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@id/bottom_navigation" />
 
-    <!-- Menu Navigasi Bawah -->
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation"
         android:layout_width="match_parent"

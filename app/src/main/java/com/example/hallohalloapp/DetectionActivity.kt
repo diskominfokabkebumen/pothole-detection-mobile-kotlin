@@ -3,6 +3,8 @@ package com.example.hallohalloapp
 import android.Manifest
 import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.Matrix
 import android.location.Location
 import android.os.Bundle
 import android.os.Looper
@@ -24,42 +26,38 @@ import java.util.concurrent.Executors
 class DetectionActivity : AppCompatActivity() {
 
     private var viewFinderDetection: PreviewView? = null
+    private var boxOverlayView: BoxOverlayView? = null
     private var tvDistanceLabel: TextView? = null
     private var tvPotholeCount: TextView? = null
 
-    // Variabel GPS & Jarak
+
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var locationCallback: LocationCallback
     private var lastLocation: Location? = null
     private var totalDistanceInMeters = 0.0
 
-    // Variabel Detektor AI YOLO
     private lateinit var potholeDetector: PotholeDetector
     private val cameraExecutor = Executors.newSingleThreadExecutor()
     private var totalPotholesDetected = 0
-    private var isCooldownActive = false // Mencegah dobel hitung pada lubang yang sama
+    private var isCooldownActive = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
         setContentView(R.layout.activity_detection)
 
-        // Inisialisasi komponen visual sesuai XML
         viewFinderDetection = findViewById(R.id.viewFinderDetection)
+        boxOverlayView = findViewById(R.id.boxOverlayView)
         tvDistanceLabel = findViewById(R.id.tvDistanceLabel)
         tvPotholeCount = findViewById(R.id.tvPotholeCount)
         val btnStopDetection = findViewById<Button>(R.id.btnStopDetection)
 
-        // 1. Inisialisasi Detektor AI TFLite
         potholeDetector = PotholeDetector(this)
 
-        // 2. Inisialisasi Klien GPS Google
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
-        // 3. Hidupkan Kamera Preview & Fungsi Analisis AI YOLO
         startCameraAndAIStream()
 
-        // 4. Hidupkan Pelacakan Jarak GPS
         setupLocationTracking()
 
         btnStopDetection.setOnClickListener {
@@ -74,33 +72,43 @@ class DetectionActivity : AppCompatActivity() {
             try {
                 val cameraProvider: ProcessCameraProvider = cameraProviderFuture.get()
 
-                // Aliran video untuk Preview layar HP
                 val preview = Preview.Builder().build().also {
                     it.setSurfaceProvider(viewFinderDetection?.surfaceProvider)
                 }
 
-                // Aliran bingkai video untuk diumpankan ke Model AI YOLO (Image Analysis)
                 val imageAnalysis = ImageAnalysis.Builder()
-                    .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST) // Mengabaikan frame lama jika CPU sibuk
+                    .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
                     .build()
 
                 imageAnalysis.setAnalyzer(cameraExecutor) { imageProxy ->
-                    // Mengonversi frame kamera KameraX menjadi format Bitmap yang dipahami TFLite
-                    val bitmap = imageProxy.toBitmap()
-                    if (bitmap != null) {
-                        // Jalankan pemindaian model YOLOv8
-                        val result = potholeDetector.detectPothole(bitmap)
 
-                        // Logika hitung jika AI mendeteksi lubang (Result = 1) dan tidak dalam masa cooldown
-                        if (result == 1 && !isCooldownActive) {
+                    val rotationDegrees = imageProxy.imageInfo.rotationDegrees
+                    val rawBitmap = imageProxy.toBitmap()
+
+                    if (rawBitmap != null) {
+                        Log.d("AI_ROTATION", "Rotation: $rotationDegrees, Bitmap size: ${rawBitmap.width}x${rawBitmap.height}")
+
+                        val bitmap = if (rotationDegrees != 0) {
+                            val matrix = Matrix()
+                            matrix.postRotate(rotationDegrees.toFloat())
+                            Bitmap.createBitmap(rawBitmap, 0, 0, rawBitmap.width, rawBitmap.height, matrix, true)
+                        } else {
+                            rawBitmap
+                        }
+
+                        val detections = potholeDetector.detectPothole(bitmap)
+
+                        runOnUiThread {
+                            boxOverlayView?.setDetections(detections)
+                        }
+
+                        if (detections.isNotEmpty() && !isCooldownActive) {
                             totalPotholesDetected++
 
-                            // Perbarui angka counter lubang di panel kanan lewat thread utama
                             runOnUiThread {
                                 tvPotholeCount?.text = totalPotholesDetected.toString()
                             }
 
-                            // Aktifkan cooldown 1.5 detik agar lubang yang sama tidak terhitung berkali-kali saat motor melaju
                             isCooldownActive = true
                             Thread {
                                 Thread.sleep(1500)
@@ -108,7 +116,6 @@ class DetectionActivity : AppCompatActivity() {
                             }.start()
                         }
                     }
-                    // Wajib ditutup setelah selesai dianalisis agar frame berikutnya bisa masuk
                     imageProxy.close()
                 }
 
@@ -152,7 +159,7 @@ class DetectionActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         cameraExecutor.shutdown()
-        potholeDetector.close() // Bebaskan memori RAM dari TFLite Interpreter
+        potholeDetector.close()
         if (::fusedLocationClient.isInitialized && ::locationCallback.isInitialized) {
             fusedLocationClient.removeLocationUpdates(locationCallback)
         }

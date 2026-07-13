@@ -2,6 +2,10 @@ package com.example.hallohalloapp
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import com.example.hallohalloapp.ui.HomeFragment
+import com.example.hallohalloapp.ui.MapFragment
+import com.example.hallohalloapp.ui.ProfileFragment
+import com.example.hallohalloapp.ui.ReportFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() {

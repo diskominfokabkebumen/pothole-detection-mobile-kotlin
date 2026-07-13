@@ -76,4 +76,4 @@ Model deteksi lubang jalan dilatih menggunakan arsitektur **YOLOv8** melalui **G
 
 ---
 
-<p align="center">Dibuat dengan 💻 oleh Rizky Fajar Triwibowo — S1 Informatika, Universitas Sebelas Maret</p>
+<p align="center">Dibuat oleh Rizky Fajar Triwibowo </p>

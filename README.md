@@ -72,6 +72,9 @@ Model deteksi lubang jalan dilatih menggunakan arsitektur **YOLOv8** melalui **G
 🔗 Progres Minggu 1
     https://drive.google.com/file/d/1tNSdu2QZ71B-mpSkL5Moj_5Z4yoIxerU/view?usp=sharing
 
+🔗 Progres Minggu 2
+    https://drive.google.com/file/d/1vwM7H9qCxhcHkiqXqRIFvxELJfwm1Ulz/view?usp=sharing
+
 
 
 ---

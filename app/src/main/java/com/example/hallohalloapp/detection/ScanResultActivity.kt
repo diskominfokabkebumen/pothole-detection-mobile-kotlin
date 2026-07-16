@@ -1,9 +1,9 @@
 package com.example.hallohalloapp.detection
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -19,16 +19,15 @@ class ScanResultActivity : AppCompatActivity() {
         val records = intent.getSerializableExtra("pothole_records") as? ArrayList<PotholeRecord> ?: arrayListOf()
 
         val tvSummary = findViewById<TextView>(R.id.tvScanSummary)
-        tvSummary.text = "Jumlah Gambar: ${records.size}\nTotal Lubang Jalan: ${records.size}"
+        tvSummary.text = "${records.size} Foto  •  ${records.size} Lubang Terdeteksi"
 
         val recyclerView = findViewById<RecyclerView>(R.id.recyclerPotholeResult)
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.adapter = PotholeResultAdapter(records) { record ->
-            Toast.makeText(
-                this,
-                "Lokasi: ${record.latitude}, ${record.longitude}",
-                Toast.LENGTH_LONG
-            ).show()
+            val mapIntent = Intent(this, MapDetailActivity::class.java)
+            mapIntent.putExtra("latitude", record.latitude)
+            mapIntent.putExtra("longitude", record.longitude)
+            startActivity(mapIntent)
         }
 
         findViewById<Button>(R.id.btnSelesaiScan).setOnClickListener {

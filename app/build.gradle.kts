@@ -40,6 +40,7 @@ dependencies {
     implementation("org.tensorflow:tensorflow-lite:2.14.0")
     implementation("org.tensorflow:tensorflow-lite-support:0.4.4")
     implementation("androidx.recyclerview:recyclerview:1.3.2")
+    implementation("org.osmdroid:osmdroid-android:6.1.20")
     implementation(libs.androidx.activity.ktx)
     implementation(libs.androidx.appcompat)
     implementation("androidx.constraintlayout:constraintlayout:2.2.0")

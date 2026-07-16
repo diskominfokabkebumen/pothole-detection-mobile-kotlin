@@ -1,6 +1,7 @@
 package com.example.hallohalloapp.detection
 
 import android.graphics.BitmapFactory
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -27,8 +28,17 @@ class PotholeResultAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = items[position]
+        val confidencePercent = (item.confidence * 100).toInt()
+
         holder.tvIndex.text = "Lubang ${position + 1}"
-        holder.tvConfidence.text = "${(item.confidence * 100).toInt()}%"
+        holder.tvConfidence.text = "$confidencePercent% yakin"
+
+        val confidenceColor = when {
+            confidencePercent >= 70 -> Color.parseColor("#2E7D32")
+            confidencePercent >= 40 -> Color.parseColor("#F9A825")
+            else -> Color.parseColor("#C62828")
+        }
+        holder.tvConfidence.setTextColor(confidenceColor)
 
         val bitmap = BitmapFactory.decodeFile(item.imagePath)
         if (bitmap != null) {

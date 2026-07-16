@@ -5,7 +5,10 @@ import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Color
 import android.graphics.Matrix
+import android.graphics.Paint
 import android.location.Location
 import android.os.Bundle
 import android.os.Looper
@@ -26,6 +29,7 @@ import java.io.File
 import java.io.FileOutputStream
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
+import kotlin.math.max
 
 class DetectionActivity : AppCompatActivity() {
 
@@ -117,7 +121,8 @@ class DetectionActivity : AppCompatActivity() {
                                 totalPotholesDetected += newDetections.size
 
                                 for (newDetection in newDetections) {
-                                    val imagePath = saveBitmapSnapshot(bitmap)
+                                    val annotatedBitmap = drawDetectionOnBitmap(bitmap, newDetection)
+                                    val imagePath = saveBitmapSnapshot(annotatedBitmap)
                                     capturedPotholes.add(
                                         PotholeRecord(
                                             imagePath = imagePath,
@@ -149,12 +154,47 @@ class DetectionActivity : AppCompatActivity() {
         }, ContextCompat.getMainExecutor(this))
     }
 
+    private fun drawDetectionOnBitmap(source: Bitmap, detection: Detection): Bitmap {
+        val output = source.copy(Bitmap.Config.ARGB_8888, true)
+        val canvas = Canvas(output)
+
+        val boxPaint = Paint().apply {
+            color = Color.RED
+            style = Paint.Style.STROKE
+            strokeWidth = max(4f, output.width * 0.008f)
+        }
+
+        val textPaint = Paint().apply {
+            color = Color.RED
+            style = Paint.Style.FILL
+            textSize = max(24f, output.width * 0.05f)
+        }
+
+        val boxCenterX = detection.centerX * output.width
+        val boxCenterY = detection.centerY * output.height
+        val boxWidth = detection.width * output.width
+        val boxHeight = detection.height * output.height
+
+        val left = boxCenterX - boxWidth / 2
+        val top = boxCenterY - boxHeight / 2
+        val right = boxCenterX + boxWidth / 2
+        val bottom = boxCenterY + boxHeight / 2
+
+        canvas.drawRect(left, top, right, bottom, boxPaint)
+
+        val label = "Lubang ${(detection.confidence * 100).toInt()}%"
+        val labelY = if (top > textPaint.textSize + 10) top - 10 else bottom + textPaint.textSize + 10
+        canvas.drawText(label, left, labelY, textPaint)
+
+        return output
+    }
+
     private fun saveBitmapSnapshot(bitmap: Bitmap): String {
         val folder = File(filesDir, "pothole_snapshots")
         if (!folder.exists()) folder.mkdirs()
         val file = File(folder, "pothole_${System.currentTimeMillis()}.jpg")
         FileOutputStream(file).use { out ->
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 80, out)
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 85, out)
         }
         return file.absolutePath
     }

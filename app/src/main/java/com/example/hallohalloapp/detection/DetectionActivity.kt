@@ -1,6 +1,7 @@
 package com.example.hallohalloapp.detection
 
 import android.Manifest
+import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
@@ -11,7 +12,6 @@ import android.os.Looper
 import android.util.Log
 import android.widget.Button
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageAnalysis
@@ -22,6 +22,8 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.hallohalloapp.R
 import com.google.android.gms.location.*
+import java.io.File
+import java.io.FileOutputStream
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
 
@@ -41,6 +43,7 @@ class DetectionActivity : AppCompatActivity() {
     private val potholeTracker = PotholeTracker()
     private val cameraExecutor = Executors.newSingleThreadExecutor()
     private var totalPotholesDetected = 0
+    private val capturedPotholes = mutableListOf<PotholeRecord>()
 
     private var cameraProvider: ProcessCameraProvider? = null
 
@@ -109,9 +112,23 @@ class DetectionActivity : AppCompatActivity() {
                                 boxOverlayView?.setDetections(detections)
                             }
 
-                            val newPotholesInThisFrame = potholeTracker.processDetections(detections)
-                            if (newPotholesInThisFrame > 0) {
-                                totalPotholesDetected += newPotholesInThisFrame
+                            val newDetections = potholeTracker.processDetections(detections)
+                            if (newDetections.isNotEmpty()) {
+                                totalPotholesDetected += newDetections.size
+
+                                for (newDetection in newDetections) {
+                                    val imagePath = saveBitmapSnapshot(bitmap)
+                                    capturedPotholes.add(
+                                        PotholeRecord(
+                                            imagePath = imagePath,
+                                            latitude = lastLocation?.latitude ?: 0.0,
+                                            longitude = lastLocation?.longitude ?: 0.0,
+                                            confidence = newDetection.confidence,
+                                            timestamp = System.currentTimeMillis()
+                                        )
+                                    )
+                                }
+
                                 runOnUiThread {
                                     tvPotholeCount?.text = totalPotholesDetected.toString()
                                 }
@@ -130,6 +147,16 @@ class DetectionActivity : AppCompatActivity() {
                 Log.e("DetectionCamera", "Gagal menyatukan Kamera & AI Pothole", exc)
             }
         }, ContextCompat.getMainExecutor(this))
+    }
+
+    private fun saveBitmapSnapshot(bitmap: Bitmap): String {
+        val folder = File(filesDir, "pothole_snapshots")
+        if (!folder.exists()) folder.mkdirs()
+        val file = File(folder, "pothole_${System.currentTimeMillis()}.jpg")
+        FileOutputStream(file).use { out ->
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 80, out)
+        }
+        return file.absolutePath
     }
 
     private fun setupLocationTracking() {
@@ -171,7 +198,9 @@ class DetectionActivity : AppCompatActivity() {
 
         potholeDetector.close()
 
-        Toast.makeText(this, "Pemantauan Selesai. Menemukan $totalPotholesDetected lubang.", Toast.LENGTH_LONG).show()
+        val intent = Intent(this, ScanResultActivity::class.java)
+        intent.putExtra("pothole_records", ArrayList(capturedPotholes))
+        startActivity(intent)
         finish()
     }
 

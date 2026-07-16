@@ -2,6 +2,7 @@ package com.example.hallohalloapp.detection
 
 import kotlin.math.max
 import kotlin.math.min
+import kotlin.math.sqrt
 
 class PotholeTracker {
 
@@ -11,28 +12,41 @@ class PotholeTracker {
     )
 
     private val trackedPotholes = mutableListOf<TrackedPothole>()
-    private val matchIouThreshold = 0.3f
-    private val expiryMillis = 3000L
+    private val matchIouThreshold = 0.1f
+    private val matchDistanceThreshold = 0.18f
+    private val expiryMillis = 5000L
 
-    fun processDetections(detections: List<Detection>): Int {
+    fun processDetections(detections: List<Detection>): List<Detection> {
         val currentTime = System.currentTimeMillis()
-        var newCount = 0
+        val newDetections = mutableListOf<Detection>()
 
         trackedPotholes.removeAll { currentTime - it.lastSeenTime > expiryMillis }
 
         for (detection in detections) {
-            val existingMatch = trackedPotholes.find { calculateIoU(it.lastSeenDetection, detection) > matchIouThreshold }
+            val existingMatch = trackedPotholes.find { isSameObject(it.lastSeenDetection, detection) }
 
             if (existingMatch != null) {
                 existingMatch.lastSeenDetection = detection
                 existingMatch.lastSeenTime = currentTime
             } else {
                 trackedPotholes.add(TrackedPothole(detection, currentTime))
-                newCount++
+                newDetections.add(detection)
             }
         }
 
-        return newCount
+        return newDetections
+    }
+
+    private fun isSameObject(a: Detection, b: Detection): Boolean {
+        if (calculateIoU(a, b) > matchIouThreshold) return true
+        if (calculateCenterDistance(a, b) < matchDistanceThreshold) return true
+        return false
+    }
+
+    private fun calculateCenterDistance(a: Detection, b: Detection): Float {
+        val dx = a.centerX - b.centerX
+        val dy = a.centerY - b.centerY
+        return sqrt(dx * dx + dy * dy)
     }
 
     private fun calculateIoU(a: Detection, b: Detection): Float {

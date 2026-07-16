@@ -50,4 +50,15 @@ object PotholeStorage {
         existing.addAll(newRecords)
         saveAll(context, existing)
     }
+
+    fun deleteRecord(context: Context, record: PotholeRecord) {
+        val existing = loadAll(context).toMutableList()
+        existing.removeAll { it.imagePath == record.imagePath && it.timestamp == record.timestamp }
+        saveAll(context, existing)
+
+        try {
+            File(record.imagePath).delete()
+        } catch (e: Exception) {
+        }
+    }
 }

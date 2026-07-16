@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -31,6 +32,9 @@ class ScanResultActivity : AppCompatActivity() {
         }
 
         findViewById<Button>(R.id.btnSelesaiScan).setOnClickListener {
+            val selected = records.filter { it.isSelected }
+            PotholeStorage.addRecords(this, selected)
+            Toast.makeText(this, "${selected.size} lubang tersimpan ke peta", Toast.LENGTH_SHORT).show()
             finish()
         }
     }

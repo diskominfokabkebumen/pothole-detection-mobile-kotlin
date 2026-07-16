@@ -34,7 +34,7 @@
                 android:background="@drawable/bg_stat_chip"
                 android:paddingHorizontal="12dp"
                 android:paddingVertical="8dp"
-                android:textColor="#FFFFFE"
+                android:textColor="#FFB238"
                 android:textSize="13sp"
                 android:fontFamily="sans-serif-medium" />
 
@@ -54,7 +54,7 @@
         android:layout_width="match_parent"
         android:layout_height="56dp"
         android:layout_margin="16dp"
-        android:text="Selesai"
+        android:text="Simpan Terpilih"
         android:textColor="#FFFFFF"
         app:backgroundTint="#4CAF50"
         app:cornerRadius="14dp" />

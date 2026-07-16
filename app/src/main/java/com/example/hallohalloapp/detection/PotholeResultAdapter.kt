@@ -5,6 +5,7 @@ import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
@@ -19,6 +20,7 @@ class PotholeResultAdapter(
         val imageThumbnail: ImageView = view.findViewById(R.id.imgPotholeThumbnail)
         val tvIndex: TextView = view.findViewById(R.id.tvPotholeIndex)
         val tvConfidence: TextView = view.findViewById(R.id.tvPotholeConfidence)
+        val chkSelected: CheckBox = view.findViewById(R.id.chkSelected)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -43,6 +45,12 @@ class PotholeResultAdapter(
         val bitmap = BitmapFactory.decodeFile(item.imagePath)
         if (bitmap != null) {
             holder.imageThumbnail.setImageBitmap(bitmap)
+        }
+
+        holder.chkSelected.setOnCheckedChangeListener(null)
+        holder.chkSelected.isChecked = item.isSelected
+        holder.chkSelected.setOnCheckedChangeListener { _, isChecked ->
+            item.isSelected = isChecked
         }
 
         holder.itemView.setOnClickListener {

@@ -7,5 +7,6 @@ data class PotholeRecord(
     val latitude: Double,
     val longitude: Double,
     val confidence: Float,
-    val timestamp: Long
+    val timestamp: Long,
+    var isSelected: Boolean = true
 ) : Serializable

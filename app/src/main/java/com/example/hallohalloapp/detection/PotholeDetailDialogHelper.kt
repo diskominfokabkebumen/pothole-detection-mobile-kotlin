@@ -9,6 +9,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.example.hallohalloapp.R
+import com.example.hallohalloapp.detection.storage.PotholeStorage
+import com.example.hallohalloapp.model.PotholeRecord
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale

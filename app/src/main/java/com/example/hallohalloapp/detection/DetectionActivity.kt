@@ -24,6 +24,12 @@ import androidx.camera.view.PreviewView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.hallohalloapp.R
+import com.example.hallohalloapp.ai.BoxOverlayView
+import com.example.hallohalloapp.ai.PotholeDetector
+import com.example.hallohalloapp.ai.PotholeTracker
+import com.example.hallohalloapp.detection.storage.AppStatsStorage
+import com.example.hallohalloapp.model.Detection
+import com.example.hallohalloapp.model.PotholeRecord
 import com.google.android.gms.location.*
 import java.io.File
 import java.io.FileOutputStream

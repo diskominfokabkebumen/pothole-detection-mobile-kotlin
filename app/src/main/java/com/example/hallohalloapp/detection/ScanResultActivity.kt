@@ -9,6 +9,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.hallohalloapp.R
+import com.example.hallohalloapp.adapter.PotholeResultAdapter
+import com.example.hallohalloapp.detection.storage.PotholeStorage
+import com.example.hallohalloapp.model.PotholeRecord
 
 class ScanResultActivity : AppCompatActivity() {
 

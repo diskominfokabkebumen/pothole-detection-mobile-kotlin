@@ -10,8 +10,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.hallohalloapp.R
 import com.example.hallohalloapp.detection.PotholeDetailDialogHelper
-import com.example.hallohalloapp.detection.PotholeReportAdapter
-import com.example.hallohalloapp.detection.PotholeStorage
+import com.example.hallohalloapp.adapter.PotholeReportAdapter
+import com.example.hallohalloapp.detection.storage.PotholeStorage
 
 class ReportFragment : Fragment() {
 

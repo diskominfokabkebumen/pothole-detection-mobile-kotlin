@@ -9,8 +9,8 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.hallohalloapp.R
-import com.example.hallohalloapp.detection.PotholeStorage
-import com.example.hallohalloapp.detection.UserProfileStorage
+import com.example.hallohalloapp.detection.storage.PotholeStorage
+import com.example.hallohalloapp.detection.storage.UserProfileStorage
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputEditText
 

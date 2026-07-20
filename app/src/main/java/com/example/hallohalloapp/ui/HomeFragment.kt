@@ -17,11 +17,11 @@ import androidx.fragment.app.Fragment
 import com.example.hallohalloapp.ui.ProfileFragment
 import com.example.hallohalloapp.R
 import com.example.hallohalloapp.ui.ReportFragment
-import com.example.hallohalloapp.detection.AppStatsStorage
+import com.example.hallohalloapp.detection.storage.AppStatsStorage
 import com.example.hallohalloapp.detection.DetectionActivity
 import com.example.hallohalloapp.detection.PotholeDetailDialogHelper
-import com.example.hallohalloapp.detection.PotholeMiniReportAdapter
-import com.example.hallohalloapp.detection.PotholeStorage
+import com.example.hallohalloapp.adapter.PotholeMiniReportAdapter
+import com.example.hallohalloapp.detection.storage.PotholeStorage
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView

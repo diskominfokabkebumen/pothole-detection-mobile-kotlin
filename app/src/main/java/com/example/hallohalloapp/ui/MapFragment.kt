@@ -19,10 +19,10 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.hallohalloapp.R
-import com.example.hallohalloapp.detection.PotholeMapMiniAdapter
-import com.example.hallohalloapp.detection.PotholeRecord
-import com.example.hallohalloapp.detection.PotholeStorage
-import com.example.hallohalloapp.MapTileConfig
+import com.example.hallohalloapp.adapter.PotholeMapMiniAdapter
+import com.example.hallohalloapp.model.PotholeRecord
+import com.example.hallohalloapp.detection.storage.PotholeStorage
+import com.example.hallohalloapp.detection.MapTileConfig
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.material.floatingactionbutton.FloatingActionButton

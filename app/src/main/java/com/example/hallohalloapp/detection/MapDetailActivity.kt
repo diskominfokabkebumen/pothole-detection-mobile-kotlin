@@ -5,7 +5,7 @@ import android.preference.PreferenceManager
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import com.example.hallohalloapp.R
-import com.example.hallohalloapp.MapTileConfig
+import com.example.hallohalloapp.detection.MapTileConfig
 import org.osmdroid.config.Configuration
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView

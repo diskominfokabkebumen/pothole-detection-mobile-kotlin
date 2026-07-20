@@ -9,6 +9,19 @@
         android:layout_height="match_parent" />
 
     <TextView
+        android:id="@+id/tvMapTotalCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|start"
+        android:layout_margin="12dp"
+        android:background="#CC0B0F14"
+        android:paddingHorizontal="12dp"
+        android:paddingVertical="6dp"
+        android:textColor="#FFB238"
+        android:textSize="12sp"
+        android:fontFamily="sans-serif-medium" />
+
+    <TextView
         android:id="@+id/tvEmptyMap"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

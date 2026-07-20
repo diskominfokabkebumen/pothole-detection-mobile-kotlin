@@ -5,8 +5,8 @@ import android.preference.PreferenceManager
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import com.example.hallohalloapp.R
+import com.example.hallohalloapp.MapTileConfig
 import org.osmdroid.config.Configuration
-import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.Marker
@@ -30,7 +30,7 @@ class MapDetailActivity : AppCompatActivity() {
         val longitude = intent.getDoubleExtra("longitude", 0.0)
 
         mapView = findViewById(R.id.mapView)
-        mapView.setTileSource(TileSourceFactory.MAPNIK)
+        mapView.setTileSource(MapTileConfig.CARTO_LIGHT)
         mapView.setMultiTouchControls(true)
 
         val point = GeoPoint(latitude, longitude)

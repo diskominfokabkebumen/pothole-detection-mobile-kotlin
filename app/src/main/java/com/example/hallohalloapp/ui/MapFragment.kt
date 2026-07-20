@@ -15,8 +15,8 @@ import androidx.fragment.app.Fragment
 import com.example.hallohalloapp.R
 import com.example.hallohalloapp.detection.PotholeRecord
 import com.example.hallohalloapp.detection.PotholeStorage
+import com.example.hallohalloapp.MapTileConfig
 import org.osmdroid.config.Configuration
-import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.BoundingBox
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
@@ -51,7 +51,7 @@ class MapFragment : Fragment() {
         tvEmptyMap = view.findViewById(R.id.tvEmptyMap)
         mapView = map
 
-        map.setTileSource(TileSourceFactory.MAPNIK)
+        map.setTileSource(MapTileConfig.CARTO_LIGHT)
         map.setMultiTouchControls(true)
 
         val records = PotholeStorage.loadAll(requireContext())

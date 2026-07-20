@@ -1,163 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bg_main"
-    android:fillViewport="true">
+    android:orientation="vertical"
+    android:background="#F5F6F8">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingBottom="80dp">
-
-        <LinearLayout
-            android:id="@+id/layoutReportHeader"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="20dp"
-            android:gravity="center_vertical"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Detail Laporan"
-                android:textColor="@color/text_primary"
-                android:textSize="18sp"
-                android:textStyle="bold"/>
-
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@drawable/ic_bell"
-                app:tint="@color/neon_green"
-                android:layout_marginEnd="16dp"/>
-
-            <ImageView
-                android:layout_width="28dp"
-                android:layout_height="28dp"
-                android:src="@drawable/ic_profile"/>
-        </LinearLayout>
-
-        <androidx.cardview.widget.CardView
-            android:id="@+id/cardAiDetection"
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:layout_marginHorizontal="20dp"
-            app:cardBackgroundColor="@color/bg_card_light"
-            app:cardCornerRadius="16dp"
-            app:layout_constraintTop_toBottomOf="@id/layoutReportHeader">
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="AI DETECTED: POTHOLE (89%)"
-                    android:background="@color/neon_green"
-                    android:textColor="@color/bg_main"
-                    android:textSize="10sp"
-                    android:textStyle="bold"
-                    android:paddingHorizontal="12dp"
-                    android:paddingVertical="6dp"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="16dp"/>
-
-                <View
-                    android:layout_width="200dp"
-                    android:layout_height="120dp"
-                    android:layout_centerInParent="true"
-                    android:background="#3300FF87"/>
-            </RelativeLayout>
-        </androidx.cardview.widget.CardView>
-
-        <TextView
-            android:id="@+id/tvReportIdLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="ID LAPORAN"
-            android:textColor="@color/text_secondary"
-            android:textSize="10sp"
-            android:textStyle="bold"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="24dp"
-            app:layout_constraintTop_toBottomOf="@id/cardAiDetection"
-            app:layout_constraintStart_toStartOf="parent"/>
-
-        <TextView
-            android:id="@+id/tvReportId"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="#SR-992-QX"
-            android:textColor="@color/text_primary"
-            android:textSize="28sp"
-            android:textStyle="bold"
-            android:layout_marginStart="20dp"
-            app:layout_constraintTop_toBottomOf="@id/tvReportIdLabel"
-            app:layout_constraintStart_toStartOf="parent"/>
+        android:orientation="vertical"
+        android:background="#12171F"
+        android:padding="20dp">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="TERVERIFIKASI"
-            android:textColor="@color/neon_green"
-            android:textSize="10sp"
-            android:textStyle="bold"
-            android:background="#1A00FF87"
-            android:paddingHorizontal="12dp"
-            android:paddingVertical="6dp"
-            android:layout_marginEnd="20dp"
-            app:layout_constraintTop_toTopOf="@id/tvReportIdLabel"
-            app:layout_constraintBottom_toBottomOf="@id/tvReportId"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            android:text="Riwayat Lubang Jalan"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp"
+            android:textStyle="bold" />
 
-        <androidx.cardview.widget.CardView
-            android:id="@+id/cardLocation"
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/tvReportSummary"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="20dp"
-            android:layout_marginTop="24dp"
-            app:cardBackgroundColor="@color/bg_card"
-            app:cardCornerRadius="12dp"
-            app:layout_constraintTop_toBottomOf="@id/tvReportId">
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="16dp">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Lokasi"
-                    android:textColor="@color/text_secondary"
-                    android:textSize="12sp"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Jl. Pahlawan, Kebumen"
-                    android:textColor="@color/text_primary"
-                    android:textSize="14sp"
-                    android:textStyle="bold"
-                    android:layout_marginTop="4dp"/>
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
+            android:layout_marginTop="10dp"
+            android:textColor="#FFB238"
+            android:textSize="13sp"
+            android:fontFamily="sans-serif-medium" />
+    </LinearLayout>
 
-        <com.google.android.material.button.MaterialButton
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerReport"
             android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:layout_marginHorizontal="20dp"
-            android:layout_marginTop="24dp"
-            android:text="BAGIKAN PEMBARUAN"
-            android:textColor="@color/bg_main"
-            app:backgroundTint="@color/neon_green"
-            app:cornerRadius="28dp"
-            app:layout_constraintTop_toBottomOf="@id/cardLocation"/>
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:paddingVertical="10dp" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</androidx.core.widget.NestedScrollView>
+        <TextView
+            android:id="@+id/tvEmptyReport"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="Belum ada riwayat lubang jalan.\nMulai scan untuk menambahkan data."
+            android:textAlignment="center"
+            android:textColor="#7C8898"
+            android:textSize="14sp"
+            android:padding="24dp"
+            android:visibility="gone" />
+
+    </FrameLayout>
+
+</LinearLayout>

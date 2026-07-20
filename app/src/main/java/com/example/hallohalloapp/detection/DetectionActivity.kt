@@ -238,6 +238,8 @@ class DetectionActivity : AppCompatActivity() {
 
         potholeDetector.close()
 
+        AppStatsStorage.addDistance(this, totalDistanceInMeters)
+
         val intent = Intent(this, ScanResultActivity::class.java)
         intent.putExtra("pothole_records", ArrayList(capturedPotholes))
         startActivity(intent)
@@ -256,6 +258,8 @@ class DetectionActivity : AppCompatActivity() {
                 Log.e("DetectionActivity", "Gagal menunggu kamera berhenti", e)
             }
             potholeDetector.close()
+
+            AppStatsStorage.addDistance(this, totalDistanceInMeters)
         }
 
         if (::fusedLocationClient.isInitialized && ::locationCallback.isInitialized) {

@@ -17,8 +17,15 @@ import androidx.fragment.app.Fragment
 import com.example.hallohalloapp.ui.ProfileFragment
 import com.example.hallohalloapp.R
 import com.example.hallohalloapp.ui.ReportFragment
+import com.example.hallohalloapp.detection.AppStatsStorage
 import com.example.hallohalloapp.detection.DetectionActivity
+import com.example.hallohalloapp.detection.PotholeDetailDialogHelper
+import com.example.hallohalloapp.detection.PotholeMiniReportAdapter
+import com.example.hallohalloapp.detection.PotholeStorage
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import java.util.Calendar
 
 class HomeFragment : Fragment() {
 
@@ -34,6 +41,10 @@ class HomeFragment : Fragment() {
         val ivNotification = view.findViewById<ImageView>(R.id.ivNotification)
         val tvLihatSemua = view.findViewById<TextView>(R.id.tvLihatSemua)
         val btnLapor = view.findViewById<Button>(R.id.btnLapor)
+        val btnSelengkapnya = view.findViewById<Button>(R.id.btnSelengkapnya)
+        val rvRecentReports = view.findViewById<RecyclerView>(R.id.rvRecentReports)
+
+        rvRecentReports?.layoutManager = LinearLayoutManager(requireContext())
 
         val bottomNav = activity?.findViewById<BottomNavigationView>(R.id.bottom_navigation)
 
@@ -45,10 +56,11 @@ class HomeFragment : Fragment() {
         }
 
         tvLihatSemua?.setOnClickListener {
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, ReportFragment())
-                .commit()
-            bottomNav?.selectedItemId = R.id.nav_report
+            navigateToReport()
+        }
+
+        btnSelengkapnya?.setOnClickListener {
+            navigateToReport()
         }
 
 
@@ -61,7 +73,68 @@ class HomeFragment : Fragment() {
             showConfirmationDialog()
         }
 
+        updateStats(view)
+
         return view
+    }
+
+    private fun navigateToReport() {
+        parentFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, ReportFragment())
+            .commit()
+        val bottomNav = activity?.findViewById<BottomNavigationView>(R.id.bottom_navigation)
+        bottomNav?.selectedItemId = R.id.nav_report
+    }
+
+    override fun onResume() {
+        super.onResume()
+        view?.let { updateStats(it) }
+    }
+
+    private fun updateStats(rootView: View) {
+        val tvTotalLaporan = rootView.findViewById<TextView>(R.id.tvTotalLaporan)
+        val tvTotalJarak = rootView.findViewById<TextView>(R.id.tvTotalJarak)
+        val tvAvgConfidence = rootView.findViewById<TextView>(R.id.tvAvgConfidence)
+        val tvLaporanBulanIni = rootView.findViewById<TextView>(R.id.tvLaporanBulanIni)
+
+        val records = PotholeStorage.loadAll(requireContext())
+
+        tvTotalLaporan?.text = records.size.toString()
+
+        val totalDistanceKm = AppStatsStorage.getTotalDistanceKm(requireContext())
+        tvTotalJarak?.text = String.format("%.1f km", totalDistanceKm)
+
+        val avgConfidence = if (records.isNotEmpty()) {
+            (records.map { it.confidence }.average() * 100).toInt()
+        } else {
+            0
+        }
+        tvAvgConfidence?.text = "$avgConfidence%"
+
+        val calendar = Calendar.getInstance()
+        val currentMonth = calendar.get(Calendar.MONTH)
+        val currentYear = calendar.get(Calendar.YEAR)
+
+        val reportsThisMonth = records.count { record ->
+            val recordCalendar = Calendar.getInstance().apply { timeInMillis = record.timestamp }
+            recordCalendar.get(Calendar.MONTH) == currentMonth &&
+                    recordCalendar.get(Calendar.YEAR) == currentYear
+        }
+        tvLaporanBulanIni?.text = reportsThisMonth.toString()
+
+        val rvRecentReports = rootView.findViewById<RecyclerView>(R.id.rvRecentReports)
+        val tvEmptyRecentReports = rootView.findViewById<TextView>(R.id.tvEmptyRecentReports)
+
+        val recentReports = records.sortedByDescending { it.timestamp }.take(2)
+
+        tvEmptyRecentReports?.visibility = if (recentReports.isEmpty()) View.VISIBLE else View.GONE
+        rvRecentReports?.visibility = if (recentReports.isEmpty()) View.GONE else View.VISIBLE
+
+        rvRecentReports?.adapter = PotholeMiniReportAdapter(recentReports) { record ->
+            PotholeDetailDialogHelper.show(this, record) {
+                updateStats(rootView)
+            }
+        }
     }
 
     private fun showConfirmationDialog() {

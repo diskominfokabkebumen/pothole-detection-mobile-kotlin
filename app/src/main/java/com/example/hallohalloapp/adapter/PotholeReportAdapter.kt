@@ -5,6 +5,7 @@ import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
@@ -13,13 +14,18 @@ import com.example.hallohalloapp.model.PotholeRecord
 
 class PotholeReportAdapter(
     private val items: List<PotholeRecord>,
-    private val onItemClick: (PotholeRecord) -> Unit
+    private val onItemClick: (PotholeRecord) -> Unit,
+    private val onSelectionChanged: (Int) -> Unit
 ) : RecyclerView.Adapter<PotholeReportAdapter.ViewHolder>() {
+
+    private var selectionMode = false
+    private val selectedTimestamps = mutableSetOf<Long>()
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val imageThumbnail: ImageView = view.findViewById(R.id.imgReportThumbnail)
         val tvIndex: TextView = view.findViewById(R.id.tvReportIndex)
         val tvConfidence: TextView = view.findViewById(R.id.tvReportConfidence)
+        val cbSelect: CheckBox = view.findViewById(R.id.cbReportSelect)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -46,10 +52,50 @@ class PotholeReportAdapter(
             holder.imageThumbnail.setImageBitmap(bitmap)
         }
 
+        holder.cbSelect.visibility = if (selectionMode) View.VISIBLE else View.GONE
+        holder.cbSelect.isChecked = selectedTimestamps.contains(item.timestamp)
+
         holder.itemView.setOnClickListener {
-            onItemClick(item)
+            if (selectionMode) {
+                toggleSelection(item)
+                notifyItemChanged(position)
+            } else {
+                onItemClick(item)
+            }
+        }
+
+        holder.itemView.setOnLongClickListener {
+            if (!selectionMode) {
+                setSelectionMode(true)
+                toggleSelection(item)
+            }
+            true
         }
     }
 
     override fun getItemCount(): Int = items.size
+
+    private fun toggleSelection(item: PotholeRecord) {
+        if (selectedTimestamps.contains(item.timestamp)) {
+            selectedTimestamps.remove(item.timestamp)
+        } else {
+            selectedTimestamps.add(item.timestamp)
+        }
+        onSelectionChanged(selectedTimestamps.size)
+    }
+
+    fun setSelectionMode(enabled: Boolean) {
+        selectionMode = enabled
+        if (!enabled) {
+            selectedTimestamps.clear()
+        }
+        onSelectionChanged(selectedTimestamps.size)
+        notifyDataSetChanged()
+    }
+
+    fun isSelectionMode(): Boolean = selectionMode
+
+    fun getSelectedRecords(): List<PotholeRecord> {
+        return items.filter { selectedTimestamps.contains(it.timestamp) }
+    }
 }
